@@ -98,7 +98,10 @@ void cwait(struct condition *c, char who[], char sem[]) {
 ////////////////////// Modified
 
 	c->count++;
+	printf("next 1111"); ///// print
 	if (next_count > 0) {
+
+		printf("next+++++++\n"); ///// print
 		sem_post(&next);
 
 		strcpy(what, "next");////////////////////////////////////////////////////
@@ -110,10 +113,14 @@ void cwait(struct condition *c, char who[], char sem[]) {
 		strcpy(what, "mutex");////////////////////////////////////////////////////
 		semprint(mutex, next, notfull.sem, notempty.sem, who, what, "increase"); ///// print
 	}
+	printf("Here\n");
 	sem_wait(&(c->sem));
+	
 
 	strcpy(what, sem);////////////////////////////////////////////////////
 	semprint(mutex, next, notfull.sem, notempty.sem, who, what, "decrease"); ///// print
+
+	printf("Done\n");
 
 	c->count--;
 }
@@ -130,6 +137,8 @@ void cpost(struct condition *c, char who[], char sem[]) {
 		strcpy(what, sem);////////////////////////////////////////////////////
 		semprint(mutex, next, notfull.sem, notempty.sem, who, what, "increase"); ///// print
 
+
+		printf("next------\n"); ///// print
 		sem_wait(&next);
 
 		strcpy(what, "next");////////////////////////////////////////////////////
@@ -144,6 +153,7 @@ void monitor_produce(int item, int index) {
 	monitor_enter(par);
 	if (count == BUFFER_SIZE) {
 		//printf("parent enter cwait\n");
+		//printf("notfull decrease alert\n");
 		cwait(&notfull, par, "notfull");
 	}
 	buffer[index] = item;
@@ -184,7 +194,10 @@ void monitor_enter(char who[]) {
 }
 
 void monitor_exit(char who[]) {
+	printf("next 1111\n"); ///// print
 	if (next_count > 0) {
+
+		printf("next++++++\n"); ///// print
 		sem_post(&next);
 
 		strcpy(what, "next");////////////////////////////////////////////////////
